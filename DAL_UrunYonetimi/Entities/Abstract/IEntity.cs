@@ -10,7 +10,7 @@ namespace DAL_UrunYonetimi.Entities.Abstract
     public interface IEntity
     {
         int Id { get; set; }
-        DateTime Created { get; set; }
+        DateTime CreatedDate { get; set; }
         DateTime? ModifiedDate { get; set; }
         DateTime? DeletedDate { get; set; }
         DataStatus DataStatus { get; set; }

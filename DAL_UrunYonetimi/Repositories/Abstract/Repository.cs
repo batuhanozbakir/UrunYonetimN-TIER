@@ -33,19 +33,19 @@ namespace DAL_UrunYonetimi.Repositories.Abstract
 
         public void Delete(T entity)
         {
-            entity.DataStatus -= DataStatus.Deleted;
+            entity.DataStatus = DataStatus.Deleted;
             entity.DeletedDate = DateTime.Now;
             Update(entity);
         }
 
         public IQueryable<T> GetAll()
         {
-                return _entities.Where(e=>e.DataStatus != DataStatus.Deleted);
+                return _entities.Where(e=>e.DataStatus != DataStatus.Deleted).AsNoTracking();
         }
 
         public T GetById(int id)
         {
-            return _entities.FirstOrDefault(e=>e.Id == id);
+            return _entities.AsNoTracking().FirstOrDefault(e=>e.Id == id);
         }
 
         public void Remove(T entity)
@@ -62,8 +62,19 @@ namespace DAL_UrunYonetimi.Repositories.Abstract
 
         public void Update(T entity)
         {
+            
             entity.DataStatus = entity.DataStatus!=DataStatus.Deleted ? DataStatus.Updated : DataStatus.Deleted;
             entity.ModifiedDate = DateTime.Now;
+            entity.CreatedDate = GetById(entity.Id).CreatedDate;
+
+            foreach (var item in _db.ChangeTracker.Entries())
+            {
+                if (item.Entity.GetType() == typeof(T))
+                {
+                    item.State = EntityState.Detached;
+                }
+            }
+
             _entities.Update(entity);
             _db.SaveChanges();
         }

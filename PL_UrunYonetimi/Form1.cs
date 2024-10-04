@@ -51,6 +51,8 @@ namespace PL_UrunYonetimi
             {
                 productManager.Delete(selectedProduct);
                 ListAllProducts();
+                selectedProduct = null;
+                lblSelectedProduct.Text = "Selected Product:";
                 MessageBox.Show("The product has succesfully been deleted!");
             }
             else
@@ -66,6 +68,8 @@ namespace PL_UrunYonetimi
                 selectedProduct.Price = Convert.ToInt32(txtPrice.Text);
                 productManager.Update(selectedProduct);
                 ListAllProducts();
+                selectedProduct = null;
+                lblSelectedProduct.Text = "Selected Product:";
                 MessageBox.Show("The product has succesfully been updated!");
             }
             else MessageBox.Show("Please select a product to update!");
